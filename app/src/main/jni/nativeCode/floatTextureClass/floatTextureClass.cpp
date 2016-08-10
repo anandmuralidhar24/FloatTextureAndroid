@@ -91,9 +91,15 @@ void FloatTextureClass::PerformGLInits() {
 
     MyLOGD("FloatTextureClass::PerformGLInits");
 
-    MyGLInits();
+    glesVersion = MyGLInits();
 
-    // create FBO (off-screen framebuffer)
+    if(glesVersion != 3) {
+        // cannot proceed further since GLES 3 is not available
+        initsDone = true;
+        return;
+    }
+
+    // create FBO for offscreen rendering
     GLuint fb;
     glGenFramebuffers(1, &fb);
     // bind offscreen framebuffer (that is, skip the window-specific render target)
@@ -101,7 +107,7 @@ void FloatTextureClass::PerformGLInits() {
 
     InitLoadReadTexture();
 
-    // bind deafult onscreen buffer
+    // bind default onscreen buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     CheckGLError("FloatTextureClass::PerformGLInits");

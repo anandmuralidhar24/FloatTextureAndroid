@@ -1,22 +1,10 @@
-SimpleARAndroid
+FloatTextureAndroid
 ===============
-In this post we build a simple AR app that positions a 3D model in a 
-particular location in the scene. We create a marker based on the scene’s
-contents. In particular we show how to:
-- Match feature points with a reference location in the scene
-- Construct the camera intrinsic matrix.
-- Estimate the pose in each frame
-- Display a 3D model at the reference location
 
-You can point at the floor and double-tap to create a marker out of the
-scene's contents. This marker image will be continuously tracked and a
-3D model will be displayed at the original location. Please ensure that
-you choose a reference marker location that has sufficent features.
+This project shows how to use a GLES texture as an array of floats.
+We load a GLES texture with floating point values from a OpenCV Mat and read it back.
 
-The project will run on devices with ABI armeabi-v7a.
-
-A blog describing this project:
-http://www.anandmuralidhar.com/blog/android/simple-ar
+The project will run on devices that support OpenGL ES 3+.
 
 License
 -------

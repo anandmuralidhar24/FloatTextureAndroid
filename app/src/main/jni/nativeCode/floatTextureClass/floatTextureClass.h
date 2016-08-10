@@ -32,11 +32,13 @@ public:
     void    PerformGLInits();
     void    Render();
     void    SetViewport(int width, int height);
-
+    int     GetGLESVersion(){return glesVersion;}
+    bool    IsInitsDone(){return initsDone;}
 private:
 
     bool    initsDone;
     int     screenWidth, screenHeight;
+    int glesVersion;
 
 };
 

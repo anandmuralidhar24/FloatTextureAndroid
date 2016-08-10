@@ -21,7 +21,7 @@
 /**
  * Basic initializations for GL.
  */
-void MyGLInits() {
+int MyGLInits() {
 
     // White background
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -35,13 +35,17 @@ void MyGLInits() {
 
     // check if the device supports GLES 3 or GLES 2
     const char* versionStr = (const char*)glGetString(GL_VERSION);
+    int glesVersion;
     if (strstr(versionStr, "OpenGL ES 3.") && gl3stubInit()) {
         MyLOGD("Device supports GLES 3");
+        glesVersion = 3;
     } else {
         MyLOGD("Device supports GLES 2");
+        glesVersion = 2;
     }
 
     CheckGLError("MyGLInits");
+    return glesVersion;
 }
 
 /**

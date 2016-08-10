@@ -55,6 +55,26 @@ Java_com_anandmuralidhar_floattextureandroid_FloatTextureActivity_DeleteObjectNa
     gHelperObject = NULL;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_anandmuralidhar_floattextureandroid_FloatTextureActivity_IsInitsDoneNative(JNIEnv *env,
+                                                                                    jobject instance) {
+
+    if (gFloatTextureObject == NULL || !gFloatTextureObject->IsInitsDone()) {
+        return JNI_FALSE;
+    } else {
+        return JNI_TRUE;
+    }
+
+}
+
+JNIEXPORT jint JNICALL
+Java_com_anandmuralidhar_floattextureandroid_FloatTextureActivity_GetGLESVersionNative(JNIEnv *env,
+                                                                                       jobject instance) {
+
+    return ((jint) gFloatTextureObject->GetGLESVersion());
+
+}
+
 
 #ifdef __cplusplus
 }

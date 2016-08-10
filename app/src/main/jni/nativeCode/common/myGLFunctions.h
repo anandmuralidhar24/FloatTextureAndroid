@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string>
 
-void MyGLInits();
+int MyGLInits();
 
 void CheckGLError(std::string functionName);
 

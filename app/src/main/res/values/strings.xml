@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FloatTextureAndroid</string>
+    <string name="exit_no_gles3">Device does not support OpenGL ES 3+.</string>
 </resources>

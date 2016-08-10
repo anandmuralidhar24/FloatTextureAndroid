@@ -21,9 +21,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 
 
 public class FloatTextureActivity extends Activity{
@@ -33,6 +32,10 @@ public class FloatTextureActivity extends Activity{
 
     private native void CreateObjectNative(AssetManager assetManager, String pathToInternalDir);
     private native void DeleteObjectNative();
+    private native boolean IsInitsDoneNative();
+    private native int GetGLESVersionNative();
+
+    private Activity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class FloatTextureActivity extends Activity{
         // layout has only two components, a GLSurfaceView and a TextView
         setContentView(R.layout.floattexture_layout);
         mGLView = (MyGLSurfaceView) findViewById (R.id.gl_surface_view);
+
+        mActivity = this;
     }
 
     @Override
@@ -62,6 +67,8 @@ public class FloatTextureActivity extends Activity{
         if (mGLView != null) {
             mGLView.onResume();
         }
+
+        new AsyncCheckGLESVersion().execute();
 
     }
 
@@ -100,6 +107,41 @@ public class FloatTextureActivity extends Activity{
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+
+    // this task simply waits till all inits are completed in native code
+    // then it displays the GLES version on the screen
+    class AsyncCheckGLESVersion extends AsyncTask<Void, String, Integer> {
+
+        @Override
+        // this function executes on a background thread
+        // hence we cannot make GL calls or manipulate UI elements here
+        protected Integer doInBackground(Void... params) {
+
+            // keep polling to check if native objects are initialized
+            while(!IsInitsDoneNative()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        // this function executes on the UI thread and we can modify UI elements
+        protected void onPostExecute(Integer result) {
+
+            int glesVersion = GetGLESVersionNative();
+            if (glesVersion != 3) {
+                // exit the app since OpenGL ES 3+ is not supported
+                ShowExitDialog(mActivity, getString(R.string.exit_no_gles3));
+            }
+        }
     }
 
     /**
